@@ -15,7 +15,8 @@ O SupleFitVerse apresenta e vende suplementos para atletas, praticantes de muscu
 | Chrislley Emylly de Oliveira Vilela | 
 | Liana Raquel Silva dos Santos Costa | 
 
-**Disciplina:** Desenvolvimento Web para I.A. **Professor(a):** Tiago Martins Ribeiro
+**Disciplina:** Desenvolvimento Web para I.A. 
+**Professor(a):** Tiago Martins Ribeiro
 
 ## Funcionalidades
 
@@ -117,7 +118,7 @@ Para ver só a parte visual, sem o assistente com IA, basta abrir `suplefitverse
 
 ## Segurança da chave de API
 
-- Os arquivos `.env` e `node_modules` estão no `.gitignore` e **não deve ser enviado ao GitHub**.
+- Os arquivos `.env` e `node_modules` estão no `.gitignore` e **não devem ser enviados ao GitHub**.
 - A chave fica somente no servidor. Nunca escreva a chave dentro do `script.js` ou do `index.html`, porque qualquer pessoa conseguiria vê-la no navegador.
 - Se a chave for exposta por engano, apague-a no Google AI Studio e gere uma nova.
 
@@ -150,6 +151,6 @@ Os cards são desenhados automaticamente a partir dessa lista.
 
 ## Autoria
 
-Projeto desenvolvido por [emylly-tech](https://github.com/emylly-tech) para fins acadêmicos.
+Projeto desenvolvido por Chrislley Emylly de Oliveira Vilela e Liana Raquel Silva dos Santos Costa para a disciplina de Desenvolvimento Web para I.A. O repositório está em [emylly-tech/SupleFitVerse](https://github.com/emylly-tech/SupleFitVerse).
 
 © 2026 SupleFitVerse. Todos os direitos reservados.
