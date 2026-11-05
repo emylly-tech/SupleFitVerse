@@ -142,7 +142,7 @@
     });
   }
 
-// --- ASSISTENTE VIRTUAL SUPLITO ---
+  // --- ASSISTENTE VIRTUAL SUPLITO ---
   var chat = $('#chat'), log = $('#log');
 
   function toggle(show) { if (chat) chat.hidden = !show; }
@@ -156,7 +156,7 @@
     log.scrollTop = log.scrollHeight;
   }
 
-// Quando você clica no botão "Enviar" da caixa de texto
+  // Quando você clica no botão "Enviar" da caixa de texto
   if ($('#sendBtn')) $('#sendBtn').addEventListener('click', enviarTextoLivre);
   
   // Ou quando aperta a tecla "Enter" dentro do input
@@ -175,35 +175,63 @@
     say(texto, 'me'); // Mostra a sua mensagem no chat
     input.value = ''; // Limpa a caixa de texto
 
-    // Envia para o backend do Gemini
+    // Envia para o Ollama local
     perguntarAoBackend(texto);
   }
 
-  // Função para falar com o teu Backend seguro
+  // Função robusta ligada diretamente ao Ollama local (porta 11434)
   async function perguntarAoBackend(perguntaDoUtilizador) {
     try {
       say("A pensar...", 'bot');
 
-      const respostaServidor = await fetch('http://localhost:3000/api/gerar', {
+      const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ prompt: perguntaDoUtilizador })
+        body: JSON.stringify({
+          model: 'llama3',
+          messages: [
+            {
+              role: 'system',
+              content: 'Você é o SUPLITO, assistente virtual oficial da SupleFitVerse. Retorne APENAS um JSON válido com este formato exato: {"escopo": "LOJA", "resposta": "sua resposta aqui"}'
+            },
+            {
+              role: 'user',
+              content: perguntaDoUtilizador
+            }
+          ],
+          stream: false,
+          format: 'json'
+        })
       });
 
-      const dados = await respostaServidor.json();
+      if (!response.ok) {
+        throw new Error('Falha na resposta do servidor Ollama');
+      }
 
-      if (respostaServidor.ok) {
-        // Substitui a mensagem de "A pensar..." pela resposta real do Gemini
-        log.lastChild.textContent = dados.resposta;
-      } else {
-        log.lastChild.textContent = "Desculpa, ocorreu um erro ao processar a tua resposta.";
+      const data = await response.json();
+      let conteudoTexto = data.message.content.trim();
+
+      // Limpeza de segurança caso o modelo envie marcações de markdown (```json ... ```)
+      conteudoTexto = conteudoTexto.replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/\s*```$/, '');
+
+      let jsonParsed;
+      try {
+        jsonParsed = JSON.parse(conteudoTexto);
+      } catch (e) {
+        jsonParsed = { resposta: conteudoTexto };
+      }
+      
+      if (log.lastChild) {
+        log.lastChild.textContent = jsonParsed.resposta || "Olá! Como posso ajudar na SupleFitVerse?";
       }
 
     } catch (erro) {
-      console.error("Erro de conexão:", erro);
-      log.lastChild.textContent = "Não foi possível ligar ao servidor backend.";
+      console.error("Erro de conexão com o Ollama:", erro);
+      if (log.lastChild) {
+        log.lastChild.textContent = "Não foi possível ligar ao servidor backend.";
+      }
     }
   }
 
