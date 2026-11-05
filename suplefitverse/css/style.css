@@ -454,6 +454,7 @@ section {
   color: var(--muted);
   margin: 0 auto 14px;
   max-width: 640px;
+  text-align: justify;
 }
 
 .about-card p:last-child {

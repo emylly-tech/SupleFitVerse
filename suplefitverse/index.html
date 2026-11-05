@@ -7,6 +7,8 @@
   <title>SupleFitVerse</title>
   <meta name="description"
     content="SupleFitVerse: whey, creatina, pré-treino e muito mais, com atendimento especializado e IA.">
+  
+  <!-- Fontes e Estilos Globais -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
@@ -14,8 +16,10 @@
 </head>
 
 <body>
+  <!-- DEFINIÇÃO DE ÍCONES SVG VETORIAIS REUTILIZÁVEIS -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
+      <!-- Logo do SupleFitVerse -->
       <symbol id="logo" viewBox="0 0 48 48">
         <polygon points="24,3 42,13.5 42,34.5 24,45 6,34.5 6,13.5" fill="#0b1c16" stroke="#00e676" stroke-width="2.2"
           stroke-linejoin="round" />
@@ -24,6 +28,8 @@
         <ellipse cx="24" cy="24" rx="21" ry="7" fill="none" stroke="#00e676" stroke-width="1.4" opacity=".7"
           transform="rotate(-28 24 24)" />
       </symbol>
+      
+      <!-- Ícone Pote de Suplemento -->
       <symbol id="tub" viewBox="0 0 100 150">
         <rect x="14" y="4" width="72" height="22" rx="6" fill="currentColor" opacity=".9" />
         <rect x="10" y="22" width="80" height="122" rx="10" fill="currentColor" />
@@ -33,6 +39,8 @@
         <rect x="30" y="76" width="30" height="4" rx="2" fill="#fff" opacity=".6" />
         <rect x="30" y="86" width="34" height="4" rx="2" fill="#fff" opacity=".35" />
       </symbol>
+      
+      <!-- Ícone Embalagem/Saco -->
       <symbol id="bag" viewBox="0 0 100 150">
         <path d="M18 8h64l8 16v114a8 8 0 0 1-8 8H18a8 8 0 0 1-8-8V24z" fill="currentColor" />
         <path d="M18 8h64l8 16H10z" fill="#fff" opacity=".18" />
@@ -44,11 +52,16 @@
     </defs>
   </svg>
 
+  <!-- ==================== CABEÇALHO / NAVEGAÇÃO PRINCIPAL ==================== -->
   <header class="top bleed">
     <div class="wrap nav">
-      <a class="logo" href="#inicio" aria-label="SupleFitVerse"><svg>
-          <use href="#logo" />
-        </svg><span>SUPLEFIT<b>VERSE</b></span></a>
+      <!-- Brand/Logo -->
+      <a class="logo" href="#inicio" aria-label="SupleFitVerse">
+        <svg><use href="#logo" /></svg>
+        <span>SUPLEFIT<b>VERSE</b></span>
+      </a>
+
+      <!-- Menu de Navegação -->
       <nav class="menu" id="menu" aria-label="Principal">
         <a href="#inicio" class="on">Início</a>
         <a href="#sobre">Sobre</a>
@@ -56,22 +69,29 @@
         <a href="#servicos">Serviços</a>
         <a href="#contato">Contato</a>
       </nav>
+
+      <!-- Ações do Cabeçalho (Carrinho e Menu Responsivo Mobile) -->
       <div class="nav-right">
-        <button class="cart" id="cart" aria-label="Carrinho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="cart" id="cart" aria-label="Carrinho">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="20" r="1.4" />
             <circle cx="18" cy="20" r="1.4" />
             <path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.5L21 7H6" />
-          </svg><span class="count" id="count">0</span></button>
-        <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><svg viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          </svg>
+          <span class="count" id="count">0</span>
+        </button>
+
+        <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
             <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg></button>
+          </svg>
+        </button>
       </div>
     </div>
   </header>
 
   <main>
+    <!-- ==================== SEÇÃO HERO / APRESENTAÇÃO ==================== -->
     <div class="hero bleed" id="inicio">
       <div class="wrap hero-grid">
         <div>
@@ -80,66 +100,81 @@
           <p class="lead">Bem-vindo ao universo SupleFitVerse. Whey, creatina, pré-treino e muito mais, com atendimento
             especializado e uma experiência de compra simples e segura.</p>
           <div class="cta">
-            <a class="btn btn-green" href="#produtos">Ver produtos <svg viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <a class="btn btn-green" href="#produtos">
+              Ver produtos 
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg></a>
-            <button class="btn btn-ghost" id="talk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              </svg>
+            </a>
+            <button class="btn btn-ghost" id="talk">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z" />
-              </svg>Falar com o Suplito</button>
+              </svg>
+              Falar com o Suplito
+            </button>
           </div>
         </div>
         <div class="photo">
           <img alt="Suplito apresentando os suplementos" src="assets/suplito2.png">
-          <div class="tag"><strong>Atendimento com IA</strong><small>Suplito, seu assistente virtual</small></div>
+          <div class="tag">
+            <strong>Atendimento com IA</strong>
+            <small>Suplito, seu assistente virtual</small>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- ==================== DEDICATÓRIA DE BENEFÍCIOS ==================== -->
     <div class="strip bleed">
       <div class="wrap strip-grid">
         <div class="strip-item">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.500-7-5-7-10V6z" />
               <path d="M9 12l2 2 4-4" />
-            </svg></div>
+            </svg>
+          </div>
           <div><strong>Qualidade e informação</strong><span>Dados claros e transparentes</span></div>
         </div>
+
         <div class="strip-item">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="4" y="10" width="16" height="11" rx="2" />
               <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-            </svg></div>
+            </svg>
+          </div>
           <div><strong>Compra segura</strong><span>Seus dados protegidos</span></div>
         </div>
+
         <div class="strip-item">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 6h11v10H3zM14 9h4l3 3v4h-7" />
               <circle cx="7" cy="18" r="1.6" />
               <circle cx="17" cy="18" r="1.6" />
-            </svg></div>
+            </svg>
+          </div>
           <div><strong>Entrega rápida</strong><span>Para todo o Brasil</span></div>
         </div>
+
         <div class="strip-item">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
+          <div class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
               <rect x="3" y="14" width="4" height="6" rx="1.500" />
               <rect x="17" y="14" width="4" height="6" rx="1.500" />
-            </svg></div>
+            </svg>
+          </div>
           <div><strong>Suporte</strong><span>Equipe e IA 24 h</span></div>
         </div>
       </div>
     </div>
 
+    <!-- ==================== SEÇÃO SOBRE ==================== -->
     <section id="sobre" class="bleed">
       <div class="wrap">
         <div class="about-card">
-          <span class="eyebrow">Quem somos</span>
           <h2>Sobre o <b>SupleFitVerse</b></h2>
           <p>O SupleFitVerse nasceu da união entre ciência da nutrição, tecnologia e paixão por alta performance. Nosso
             objetivo é oferecer suplementos de qualidade, com informações claras e transparentes, para atletas,
@@ -150,6 +185,7 @@
       </div>
     </section>
 
+    <!-- ==================== SEÇÃO VITRINE DE PRODUTOS ==================== -->
     <section id="produtos" class="products bleed">
       <div class="wrap">
         <div class="sec-head">
@@ -158,7 +194,7 @@
           <p>Confira alguns dos produtos da nossa vitrine.</p>
         </div>
 
-        <!-- ABAS DE NAVEGAÇÃO / FILTROS DE CATEGORIA -->
+        <!-- Abas de Navegação e Filtros de Categoria -->
         <div class="tabs-bar" style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
           <button onclick="filterProducts('all', event)" class="cat-btn active" style="padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; border: 1px solid #1e293b; background-color: #00e676; color: #050a0d;">Todos</button>
           <button onclick="filterProducts('whey', event)" class="cat-btn" style="padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; border: 1px solid #1e293b; background-color: #0b1016; color: #94a3b8;">Whey Protein</button>
@@ -169,15 +205,16 @@
           <button onclick="filterProducts('barras', event)" class="cat-btn" style="padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; border: 1px solid #1e293b; background-color: #0b1016; color: #94a3b8;">Barras de Proteína</button>
         </div>
 
-        <!-- CONTAINER ONDE OS PRODUTOS APARECEM DE ACORDO COM A ABA -->
+        <!-- Grid dinâmico populado via JS script.js -->
         <div class="grid-4" id="productsGrid">
-          <!-- Os cards serão gerados dinamicamente pelo JavaScript -->
+          <!-- Cards renderizados dinamicamente -->
         </div>
 
         <p class="note">Imagens e informações ilustrativas para fins acadêmicos. Consulte o rótulo e as informações do fabricante antes do consumo.</p>
       </div>
     </section>
 
+    <!-- ==================== SEÇÃO SERVIÇOS ==================== -->
     <section id="servicos" class="bleed">
       <div class="wrap">
         <div class="sec-head">
@@ -187,30 +224,35 @@
         </div>
         <div class="grid-3">
           <div class="svc">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="5" y="8" width="14" height="11" rx="3" />
                 <path d="M12 8V5M9 13h.01M15 13h.01" />
-              </svg></div>
+              </svg>
+            </div>
             <h3>Atendimento com IA</h3>
             <p>O Suplito tira dúvidas sobre produtos, ingredientes e formas de uso a qualquer hora do dia.</p>
           </div>
+
           <div class="svc">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 11l3 3 8-8" />
                 <path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" />
-              </svg></div>
+              </svg>
+            </div>
             <h3>Recomendação de produtos</h3>
             <p>Conte seu objetivo e receba sugestões de whey, creatina, pré-treino e outros itens do catálogo.</p>
           </div>
+
           <div class="svc">
-            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 6h11v10H3zM14 9h4l3 3v4h-7" />
                 <circle cx="7" cy="18" r="1.600" />
                 <circle cx="17" cy="18" r="1.600" />
-              </svg></div>
+              </svg>
+            </div>
             <h3>Entrega e acompanhamento</h3>
             <p>Envio para todo o Brasil com informações do pedido do pagamento até a chegada.</p>
           </div>
@@ -218,19 +260,28 @@
       </div>
     </section>
 
+    <!-- ==================== SEÇÃO FORMULÁRIO DE CONTATO ==================== -->
     <section id="contato" class="contact bleed">
       <div class="wrap">
         <h2 class="big">Fale Conosco</h2>
         <p class="sub">Tire suas dúvidas ou peça recomendações de produtos diretamente para nossa equipe.</p>
         <form class="form-card" id="form" novalidate>
-          <div class="field"><label for="nome">Nome Completo</label><input id="nome" name="nome" type="text"
-              placeholder="Digite seu nome" required></div>
-          <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email"
-              placeholder="seuemail@exemplo.com" required></div>
-          <div class="field"><label for="assunto">Assunto</label><input id="assunto" name="assunto" type="text"
-              placeholder="Ex: Recomendação de suplemento" required></div>
-          <div class="field"><label for="mensagem">Mensagem</label><textarea id="mensagem" name="mensagem"
-              placeholder="Escreva sua mensagem aqui..." required></textarea></div>
+          <div class="field">
+            <label for="nome">Nome Completo</label>
+            <input id="nome" name="nome" type="text" placeholder="Digite seu nome" required>
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" placeholder="seuemail@exemplo.com" required>
+          </div>
+          <div class="field">
+            <label for="assunto">Assunto</label>
+            <input id="assunto" name="assunto" type="text" placeholder="Ex: Recomendação de suplemento" required>
+          </div>
+          <div class="field">
+            <label for="mensagem">Mensagem</label>
+            <textarea id="mensagem" name="mensagem" placeholder="Escreva sua mensagem aqui..." required></textarea>
+          </div>
           <button class="submit" type="submit">Enviar Mensagem</button>
           <div class="sent" id="sent" role="status">Mensagem recebida. Nossa equipe responde em breve.</div>
         </form>
@@ -238,13 +289,15 @@
     </section>
   </main>
 
+  <!-- ==================== RODAPÉ (FOOTER) ==================== -->
   <footer class="bleed">
     <div class="wrap">
       <div class="foot-grid">
         <div class="foot-brand">
-          <a class="logo" href="#inicio"><svg>
-              <use href="#logo" />
-            </svg><span>SUPLEFIT<b>VERSE</b></span></a>
+          <a class="logo" href="#inicio">
+            <svg><use href="#logo" /></svg>
+            <span>SUPLEFIT<b>VERSE</b></span>
+          </a>
           <p>Suplementação, informação e performance.</p>
         </div>
 
@@ -263,62 +316,79 @@
           <p>contato@suplefitverse.com</p>
           <p>(86) 99999-9999</p>
         </div>
-        <div>
 
+        <div>
           <h4>Redes sociais</h4>
           <div class="social">
-            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2">
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="18" height="18" rx="5" />
                 <circle cx="12" cy="12" r="4" />
                 <circle cx="17.500" cy="6.500" r=".8" fill="currentColor" />
-              </svg></a>
-            <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              </svg>
+            </a>
+            <a href="#" aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12a8 8 0 0 1-11.600 7.100L3 21l1.900-6.400A8 8 0 1 1 21 12z" />
-              </svg></a>
-            <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+              </svg>
+            </a>
+            <a href="#" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 3v11.500a3.500 3.500 0 1 1-3.500-3.500M14 3c.3 2.600 2 4.300 5 4.500" />
-              </svg></a>
+              </svg>
+            </a>
           </div>
         </div>
       </div>
 
-
-      <div class="copy"><span>© 2026 Suplefitverse. Todos os direitos reservados.</span></div>
-
-
+      <div class="copy">
+        <span>© 2026 Suplefitverse. Todos os direitos reservados.</span>
+      </div>
     </div>
   </footer>
 
-  <!-- Suplito: robô fixo à direita, como na foto do site -->
+  <!-- ==================== WIDGET / CHAT DA INTELIGÊNCIA ARTIFICIAL (SUPLITO) ==================== -->
   <div class="chat" id="chat" hidden>
-    <div class="chat-head"><img src="assets/suplito.png" alt="Suplito">
-      <div><strong>Suplito</strong><small>● Assistente virtual</small></div><button id="close"
-        aria-label="Fechar chat">×</button>
+    <!-- Cabeçalho do Chat -->
+    <div class="chat-head">
+      <img src="assets/suplito.png" alt="Suplito">
+      <div>
+        <strong>Suplito</strong>
+        <small>● Assistente virtual</small>
+      </div>
+      <button id="close" aria-label="Fechar chat">×</button>
     </div>
+
+    <!-- Histórico da Conversa -->
     <div class="chat-log" id="log">
-      <div class="msg bot">Oi! Eu sou o Suplito. Posso ajudar a escolher um suplemento ou tirar dúvidas da loja. Sobre o
-        que você quer falar?</div>
+      <div class="msg bot">
+        Oi! Eu sou o Suplito. Posso ajudar a escolher um suplemento ou tirar dúvidas da loja. Sobre o que você quer falar?
+      </div>
     </div>
+
+    <!-- Botões de Perguntas Rápidas -->
     <div class="quick" id="quick">
       <button data-q="Qual whey escolher?">Qual whey escolher?</button>
       <button data-q="Para que serve a creatina?">Creatina</button>
       <button data-q="Como funciona a entrega?">Entrega</button>
     </div>
-      <!-- Caixa de texto personalizada para falar com o Suplito -->
+
+    <!-- Caixa de Entrada e Envio de Mensagem -->
     <div class="chat-input-area" style="padding: 10px; display: flex; gap: 5px;">
       <input type="text" id="userInput" placeholder="Escreva sua dúvida..." style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #ccc;" />
       <button id="sendBtn" style="padding: 8px 12px; background: #00c853; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Enviar</button>
     </div>
   </div>
 
+  <!-- Botão Flutuante para Abrir/Fechar o Suplito -->
   <div class="suplito">
     <button class="ask" id="ask">Peça ao Suplito</button>
-    <button class="bot" id="bot" aria-label="Abrir chat com o Suplito"><img src="assets/suplito.png"
-        alt="Suplito"></button>
+    <button class="bot" id="bot" aria-label="Abrir chat com o Suplito">
+      <img src="assets/suplito.png" alt="Suplito">
+    </button>
   </div>
+
+  <!-- Lógica e Comportamento Javascript -->
   <script src="js/script.js"></script>
 </body>
 
