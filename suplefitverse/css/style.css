@@ -1,4 +1,6 @@
-/* Layout: loja escura de suplementos, uma coluna de seções com hero em duas colunas, robô Suplito fixo no canto inferior direito. */
+/* ==========================================================================
+   1. VARIÁVEIS GLOBAIS E CONFIGURAÇÕES BÁSICAS
+   ================================================================---------- */
 :root {
   --bg: #080d12;
   --bg-2: #0b1218;
@@ -77,7 +79,10 @@ textarea {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
-/* header */
+
+/* ==========================================================================
+   2. CABEÇALHO (HEADER E MENU DE NAVEGAÇÃO)
+   ================================================================---------- */
 header.top {
   position: sticky;
   top: env(safe-area-inset-top, 0px);
@@ -189,7 +194,10 @@ header.top {
   height: 20px;
 }
 
-/* buttons */
+
+/* ==========================================================================
+   3. BOTÕES GLOBAIS
+   ================================================================---------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -231,7 +239,10 @@ header.top {
   height: 16px;
 }
 
-/* hero */
+
+/* ==========================================================================
+   4. SEÇÃO HERO (DESTAQUE PRINCIPAL)
+   ================================================================---------- */
 .hero {
   position: relative;
   padding-block: 72px 56px;
@@ -344,7 +355,10 @@ h1 span {
   font-size: 11.5px;
 }
 
-/* trust strip */
+
+/* ==========================================================================
+   5. BARRA DE CONFIANÇA (TRUST STRIP)
+   ================================================================---------- */
 .strip {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -396,7 +410,10 @@ h1 span {
   font-size: 12.5px;
 }
 
-/* sections */
+
+/* ==========================================================================
+   6. CONFIGURAÇÕES GERAIS DE SEÇÕES
+   ================================================================---------- */
 section {
   padding-block: 84px;
 }
@@ -428,7 +445,10 @@ section {
   max-width: 520px;
 }
 
-/* about */
+
+/* ==========================================================================
+   7. SEÇÃO SOBRE (ABOUT)
+   ================================================================---------- */
 .about-card {
   max-width: 760px;
   margin: 0 auto;
@@ -461,7 +481,10 @@ section {
   margin-bottom: 0;
 }
 
-/* products */
+
+/* ==========================================================================
+   8. PRODUTOS E ABAS DE CATEGORIAS
+   ================================================================---------- */
 .products {
   background: var(--bg-2);
   border-top: 1px solid var(--line);
@@ -580,7 +603,7 @@ section {
   margin-top: 26px;
 }
 
-/* Abas de categorias (adicionar no fim do style.css) */
+/* Abas de categorias */
 .tabs-bar {
   display: flex;
   gap: 0.75rem;
@@ -614,10 +637,9 @@ section {
 }
 
 
-
-
-
-/* services */
+/* ==========================================================================
+   9. SERVIÇOS
+   ================================================================---------- */
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -659,7 +681,10 @@ section {
   font-size: 14px;
 }
 
-/* contact (formulário como na foto 3) */
+
+/* ==========================================================================
+   10. CONTATO (FORMULÁRIO)
+   ================================================================---------- */
 .contact h2.big {
   text-align: center;
   font-size: clamp(30px, 4vw, 42px);
@@ -760,7 +785,10 @@ section {
   display: block;
 }
 
-/* footer */
+
+/* ==========================================================================
+   11. RODAPÉ (FOOTER)
+   ================================================================---------- */
 footer {
   background: #060a0e;
   border-top: 1px solid var(--line);
@@ -830,7 +858,10 @@ footer {
   font-size: 12px;
 }
 
-/* Suplito (robô fixo à direita) */
+
+/* ==========================================================================
+   12. SUPLITO (ROBÔ FIXO E CHAT FLUTUANTE)
+   ================================================================---------- */
 .suplito {
   position: fixed;
   z-index: 70;
@@ -887,12 +918,10 @@ footer {
 }
 
 @keyframes suplito-float {
-
   0%,
   100% {
     transform: translateX(-50%) translateY(0);
   }
-
   50% {
     transform: translateX(-50%) translateY(-4px);
   }
@@ -1001,7 +1030,10 @@ footer {
   font-weight: 600;
 }
 
-/* responsive */
+
+/* ==========================================================================
+   13. RESPONSIVIDADE (MEDIA QUERIES)
+   ================================================================---------- */
 @media (max-width: 980px) {
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
