@@ -28,7 +28,7 @@
 
   // --- BASE DE DADOS DOS PRODUTOS COM CAMINHO DE IMAGEM REAL ---
   var products = [
-    // Whey Protein (4 itens) - O primeiro já usa a sua imagem real!
+    // Whey Protein (4 itens)
     { id: 1, name: "Whey 100% Black Skull 900g", category: "whey", price: 227.00, inst: "ou 3x de R$ 75,67", tags: ["100% Whey", "Ganho de massa", "Low carb"], image: "./assets/whey.jpg" },
     { id: 2, name: "Whey Protein Concentrado Growth 900g", category: "whey", price: 240.00, inst: "ou 3x de R$ 80,00", tags: ["Alta proteína", "Ganho de massa", "Low carb"], image: "assets/growth.jpg" },
     { id: 3, name: "Whey Iso Hydro Pro 900g Premium", category: "whey", price: 289.90, inst: "ou 3x de R$ 96,63", tags: ["Isolado", "Zero lactose", "Absorção rápida"], image: "assets/iso.jpg" },
@@ -67,7 +67,7 @@
 
   var n = 0, count = $('#count'), grid = $('#productsGrid');
 
-  // --- FUNÇÃO PARA DESENHAR OS CARDS USANDO TAG <img> EM VEZ DE SVG ---
+  // --- FUNÇÃO PARA DESENHAR OS CARDS ---
   function renderProducts(items) {
     if (!grid) return;
     grid.innerHTML = items.map(function (p) {
@@ -194,7 +194,29 @@
           messages: [
             {
               role: 'system',
-              content: 'Você é o SUPLITO, assistente virtual oficial da SupleFitVerse. Retorne APENAS um JSON válido com este formato exato: {"escopo": "LOJA", "resposta": "sua resposta aqui"}'
+              content: `Você é o Suplito, o assistente virtual oficial da loja de suplementos Suplefitverse. 
+Sua ÚNICA função é ajudar clientes com dúvidas sobre suplementação alimentar, produtos da loja, treinos e entregas.
+
+INFORMAÇÕES OFICIAIS DA LOJA SUPLEFITVERSE:
+- Catálogo: Vendemos Whey Protein (Concentrado, Isolado, Hidrolisado e Blend), Creatinas (Monohidratada, Creapure, Micronizada), Pré-treinos, Hipercalóricos, Coqueteleiras e Barras de Proteína.
+- Entregas e Frete: Enviamos para todo o Brasil. Frete grátis para compras acima de R$ 150,00.
+- Pagamentos: Aceitamos Pix, cartão de crédito parcelado e boleto bancário.
+- Suporte: Atendimento humano disponível através do formulário de contato na aba de Contato do site ou pelo e-mail contato@suplefitverse.com.br.
+
+REGRAS ESTRITAS:
+1. NUNCA responda perguntas sobre futebol, política, entretenimento, história, matemática, programação ou qualquer assunto fora do universo fitness e da loja.
+2. Se o usuário perguntar algo fora do tema, recuse com educação, simpatia e redirecione a conversa para os produtos da Suplefitverse.
+3. Mantenha as respostas curtas, diretas e focadas em ajudar o cliente.
+4. Aviso de Saúde: Nunca faça diagnósticos ou substitua orientações médicas/nutricionais; recomende sempre consultar um profissional de saúde.
+
+EXEMPLOS DE COMO AGIR:
+Usuário: "Quem ganhou a copa do mundo?"
+Suplito: "Poxa, de futebol eu não entendo nada! 😄 Meu foco por aqui é ajudar você a alcançar seus objetivos com os melhores suplementos da Suplefitverse. Quer saber mais sobre Whey Protein, Creatina ou como funciona nossa entrega?"
+
+Usuário: "Me dá uma receita de bolo de chocolate."
+Suplito: "Adoraria ajudar, mas minha especialidade é apenas nutrição esportiva e suplementação! Se quiser dicas de como usar Whey nas suas receitas fitness, é só me chamar."
+
+Retorne APENAS um JSON válido com este formato exato: {"escopo": "LOJA", "resposta": "sua resposta aqui"}`
             },
             {
               role: 'user',
@@ -202,7 +224,10 @@
             }
           ],
           stream: false,
-          format: 'json'
+          format: 'json',
+          options: {
+            temperature: 0.1
+          }
         })
       });
 
