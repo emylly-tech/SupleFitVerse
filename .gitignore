@@ -6,6 +6,5 @@ Thumbs.db
 .vscode/
 *.log
 
-# Prevenção para arquivos sensíveis e dependências
-.env
-node_modules/
+# Prevenção para arquivos sensíveis
+config.js

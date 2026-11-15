@@ -1,3 +1,9 @@
+// --- INICIALIZAÇÃO GLOBAL DO SUPABASE ---
+const supabaseClient = window.supabase.createClient(
+  window.SUPABASE_CONFIG.URL, 
+  window.SUPABASE_CONFIG.KEY
+);
+
 (function () {
   var $ = function (s) { return document.querySelector(s); };
 
@@ -65,7 +71,35 @@
     { id: 24, name: "Top Whey Bar 41g", category: "barras", price: 80.55, inst: "ou 2x de R$ 41,52", tags: ["Recuperação", "Praticidade", "Top Whey"], image: "assets/bar.jpg" }
   ];
 
-  var n = 0, count = $('#count'), grid = $('#productsGrid');
+  // --- GESTÃO DO CARRINHO ---
+  var cartItems = [];
+  var count = $('#count'), grid = $('#productsGrid');
+  var cartModal = $('#cartModal');
+  var cartItemsList = $('#cartItemsList');
+  var cartTotalPrice = $('#cartTotalPrice');
+
+  // Abrir e fechar modal do carrinho
+  var cartBtn = $('#cart');
+  var closeCartModal = $('#closeCartModal');
+
+  if (cartBtn && cartModal) {
+    cartBtn.addEventListener('click', function () {
+      cartModal.style.display = 'flex';
+      renderCartItems();
+    });
+  }
+
+  if (closeCartModal && cartModal) {
+    closeCartModal.addEventListener('click', function () {
+      cartModal.style.display = 'none';
+    });
+  }
+
+  window.addEventListener('click', function (e) {
+    if (e.target === cartModal) {
+      cartModal.style.display = 'none';
+    }
+  });
 
   // --- FUNÇÃO PARA DESENHAR OS CARDS ---
   function renderProducts(items) {
@@ -83,28 +117,72 @@
         '<h3>' + p.name + '</h3>' +
         '<div class="price">' + formattedPrice + '</div>' +
         '<div class="inst">' + p.inst + '</div>' +
-        '<button class="btn btn-green add" data-name="' + p.name + '">Adicionar ao carrinho</button>' +
+        '<button class="btn btn-green add" data-id="' + p.id + '">Adicionar ao carrinho</button>' +
         '</div></article>';
     }).join('');
 
     initCartButtons();
   }
 
-  // --- CARRINHO DINÂMICO ---
+  // --- ADICIONAR AO CARRINHO ---
   function initCartButtons() {
     document.querySelectorAll('.add').forEach(function (b) {
       b.addEventListener('click', function () {
-        n += 1; 
-        if (count) count.textContent = n;
-        b.textContent = 'Adicionado ✓'; 
-        b.classList.add('added');
-        setTimeout(function () { 
-          b.textContent = 'Adicionar ao carrinho'; 
-          b.classList.remove('added'); 
-        }, 1400);
+        var productId = parseInt(b.getAttribute('data-id'));
+        var product = products.find(function(p) { return p.id === productId; });
+
+        if (product) {
+          cartItems.push(product);
+          if (count) count.textContent = cartItems.length;
+
+          b.textContent = 'Adicionado ✓'; 
+          b.classList.add('added');
+          setTimeout(function () { 
+            b.textContent = 'Adicionar ao carrinho'; 
+            b.classList.remove('added'); 
+          }, 1400);
+        }
       });
     });
   }
+
+  // --- RENDERIZAR ITENS NO MODAL DO CARRINHO ---
+  function renderCartItems() {
+    if (!cartItemsList) return;
+
+    if (cartItems.length === 0) {
+      cartItemsList.innerHTML = '<p style="color: #94a3b8; text-align: center; margin: 20px 0;">Seu carrinho está vazio.</p>';
+      if (cartTotalPrice) cartTotalPrice.textContent = 'R$ 0,00';
+      return;
+    }
+
+    var html = '';
+    var total = 0;
+
+    cartItems.forEach(function (item, index) {
+      total += item.price;
+      var formattedPrice = 'R$ ' + item.price.toFixed(2).replace('.', ',');
+      html += '<div style="display: flex; justify-content: space-between; align-items: center; background: #0b1016; padding: 10px; border-radius: 6px;">' +
+        '<div>' +
+        '<strong style="font-size: 0.9rem; display: block; color: #fff;">' + item.name + '</strong>' +
+        '<span style="color: #00e676; font-size: 0.85rem;">' + formattedPrice + '</span>' +
+        '</div>' +
+        '<button onclick="window.removeFromCart(' + index + ')" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1.1rem;" title="Remover">&times;</button>' +
+        '</div>';
+    });
+
+    cartItemsList.innerHTML = html;
+    if (cartTotalPrice) {
+      cartTotalPrice.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+    }
+  }
+
+  // Remover item individual do carrinho globalmente
+  window.removeFromCart = function (index) {
+    cartItems.splice(index, 1);
+    if (count) count.textContent = cartItems.length;
+    renderCartItems();
+  };
 
   // --- ALTERNAR AS ABAS DE CATEGORIA ---
   window.filterProducts = function (category, evt) {
@@ -124,24 +202,6 @@
   // Inicializa o catálogo ao carregar
   renderProducts(products);
 
-  // --- FORMULÁRIO DE CONTATO ---
-  var form = $('#form'), sent = $('#sent');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (!form.checkValidity()) { form.reportValidity(); return; }
-      if (sent) sent.classList.add('show'); 
-      form.reset();
-      setTimeout(function () { if (sent) sent.classList.remove('show'); }, 5000);
-    });
-    form.querySelectorAll('input,textarea').forEach(function (el) {
-      el.addEventListener('invalid', function () {
-        el.setCustomValidity(el.validity.valueMissing ? 'Preencha este campo.' : (el.type === 'email' ? 'Informe um e-mail válido.' : ''));
-      });
-      el.addEventListener('input', function () { el.setCustomValidity(''); });
-    });
-  }
-
   // --- ASSISTENTE VIRTUAL SUPLITO ---
   var chat = $('#chat'), log = $('#log');
 
@@ -156,10 +216,7 @@
     log.scrollTop = log.scrollHeight;
   }
 
-  // Quando você clica no botão "Enviar" da caixa de texto
   if ($('#sendBtn')) $('#sendBtn').addEventListener('click', enviarTextoLivre);
-  
-  // Ou quando aperta a tecla "Enter" dentro do input
   if ($('#userInput')) $('#userInput').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       enviarTextoLivre();
@@ -172,51 +229,24 @@
     var texto = input.value.trim();
     if (!texto) return;
 
-    say(texto, 'me'); // Mostra a sua mensagem no chat
-    input.value = ''; // Limpa a caixa de texto
-
-    // Envia para o Ollama local
+    say(texto, 'me'); 
+    input.value = ''; 
     perguntarAoBackend(texto);
   }
 
-  // Função robusta ligada diretamente ao Ollama local (porta 11434)
   async function perguntarAoBackend(perguntaDoUtilizador) {
     try {
-      say("A pensar...", 'bot');
+      say("Pensando...", 'bot');
 
       const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'llama3',
           messages: [
             {
               role: 'system',
-              content: `Você é o Suplito, o assistente virtual oficial da loja de suplementos Suplefitverse. 
-Sua ÚNICA função é ajudar clientes com dúvidas sobre suplementação alimentar, produtos da loja, treinos e entregas.
-
-INFORMAÇÕES OFICIAIS DA LOJA SUPLEFITVERSE:
-- Catálogo: Vendemos Whey Protein (Concentrado, Isolado, Hidrolisado e Blend), Creatinas (Monohidratada, Creapure, Micronizada), Pré-treinos, Hipercalóricos, Coqueteleiras e Barras de Proteína.
-- Entregas e Frete: Enviamos para todo o Brasil. Frete grátis para compras acima de R$ 150,00.
-- Pagamentos: Aceitamos Pix, cartão de crédito parcelado e boleto bancário.
-- Suporte: Atendimento humano disponível através do formulário de contato na aba de Contato do site ou pelo e-mail contato@suplefitverse.com.br.
-
-REGRAS ESTRITAS:
-1. NUNCA responda perguntas sobre futebol, política, entretenimento, história, matemática, programação ou qualquer assunto fora do universo fitness e da loja.
-2. Se o usuário perguntar algo fora do tema, recuse com educação, simpatia e redirecione a conversa para os produtos da Suplefitverse.
-3. Mantenha as respostas curtas, diretas e focadas em ajudar o cliente.
-4. Aviso de Saúde: Nunca faça diagnósticos ou substitua orientações médicas/nutricionais; recomende sempre consultar um profissional de saúde.
-
-EXEMPLOS DE COMO AGIR:
-Usuário: "Quem ganhou a copa do mundo?"
-Suplito: "Poxa, de futebol eu não entendo nada! 😄 Meu foco por aqui é ajudar você a alcançar seus objetivos com os melhores suplementos da Suplefitverse. Quer saber mais sobre Whey Protein, Creatina ou como funciona nossa entrega?"
-
-Usuário: "Me dá uma receita de bolo de chocolate."
-Suplito: "Adoraria ajudar, mas minha especialidade é apenas nutrição esportiva e suplementação! Se quiser dicas de como usar Whey nas suas receitas fitness, é só me chamar."
-
-Retorne APENAS um JSON válido com este formato exato: {"escopo": "LOJA", "resposta": "sua resposta aqui"}`
+              content: `Você é o Suplito, o assistente virtual oficial da loja de suplementos Suplefitverse.`
             },
             {
               role: 'user',
@@ -225,20 +255,14 @@ Retorne APENAS um JSON válido com este formato exato: {"escopo": "LOJA", "respo
           ],
           stream: false,
           format: 'json',
-          options: {
-            temperature: 0.1
-          }
+          options: { temperature: 0.1 }
         })
       });
 
-      if (!response.ok) {
-        throw new Error('Falha na resposta do servidor Ollama');
-      }
+      if (!response.ok) throw new Error('Falha na resposta do servidor Ollama');
 
       const data = await response.json();
       let conteudoTexto = data.message.content.trim();
-
-      // Limpeza de segurança caso o modelo envie marcações de markdown (```json ... ```)
       conteudoTexto = conteudoTexto.replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/\s*```$/, '');
 
       let jsonParsed;
@@ -255,7 +279,7 @@ Retorne APENAS um JSON válido com este formato exato: {"escopo": "LOJA", "respo
     } catch (erro) {
       console.error("Erro de conexão com o Ollama:", erro);
       if (log.lastChild) {
-        log.lastChild.textContent = "Não foi possível ligar ao servidor backend.";
+        log.lastChild.textContent = "Não foi possível conectar ao servidor backend.";
       }
     }
   }
@@ -268,11 +292,136 @@ Retorne APENAS um JSON válido com este formato exato: {"escopo": "LOJA", "respo
   if ($('#quick')) $('#quick').addEventListener('click', function (e) {
     var q = e.target.getAttribute && e.target.getAttribute('data-q'); 
     if (!q) return;
-    
     say(q, 'me'); 
-    
-    setTimeout(function () { 
-      perguntarAoBackend(q); 
-    }, 450);
+    setTimeout(function () { perguntarAoBackend(q); }, 450);
   });
+
+  // --- FLUXO DE SIMULAÇÃO DE PAGAMENTO ---
+  var checkoutCartBtn = document.getElementById('checkoutCartBtn');
+  var checkoutFormSection = document.getElementById('checkoutFormSection');
+  var confirmCheckoutBtn = document.getElementById('confirmCheckoutBtn');
+
+  if (checkoutCartBtn && checkoutFormSection) {
+    checkoutCartBtn.addEventListener('click', function () {
+      if (cartItems.length === 0) {
+        alert('Seu carrinho está vazio!');
+        return;
+      }
+      checkoutFormSection.style.display = 'block';
+      checkoutCartBtn.style.display = 'none';
+    });
+  }
+
+  if (confirmCheckoutBtn) {
+    confirmCheckoutBtn.addEventListener('click', async function () {
+      var nomeInput = document.getElementById('checkoutNome');
+      var emailInput = document.getElementById('checkoutEmail');
+
+      var nome = nomeInput ? nomeInput.value.trim() : '';
+      var email = emailInput ? emailInput.value.trim() : '';
+
+      if (!nome || !email) {
+        alert('Por favor, preencha seu nome e e-mail para continuar.');
+        return;
+      }
+
+      var total = cartItems.reduce(function(acc, item) {
+        return acc + item.price;
+      }, 0);
+
+      const { data: clienteData, error: clienteError } = await supabaseClient
+        .from('clientes')
+        .insert([{ nome: nome, email: email }])
+        .select()
+        .single();
+
+      if (clienteError) {
+        console.error('Erro ao salvar cliente:', clienteError);
+        alert('Erro ao cadastrar cliente: ' + clienteError.message);
+        return;
+      }
+
+      const { data: pedidoData, error: pedidoError } = await supabaseClient
+        .from('pedidos')
+        .insert([{
+          cliente_id: clienteData.id,
+          valor_total: total,
+          status: 'Simulacao'
+        }])
+        .select()
+        .single();
+
+      if (pedidoError) {
+        console.error('Erro ao salvar pedido:', pedidoError);
+        alert('Erro ao processar pedido: ' + pedidoError.message);
+        return;
+      }
+
+      for (const item of cartItems) {
+        const { error: itemError } = await supabaseClient
+          .from('itens_pedido')
+          .insert([
+            {
+              pedido_id: pedidoData.id,
+              produto_id: item.id,
+              quantidade: 1
+            }
+          ]);
+
+        if (itemError) {
+          console.error("Erro ao salvar item do pedido:", itemError.message);
+        }
+      }
+
+      alert('Simulação realizada com sucesso! Pedido e itens registrados no banco de dados.');
+      cartItems = [];
+      var countEl = document.getElementById('count');
+      if (countEl) countEl.textContent = '0';
+      
+      checkoutFormSection.style.display = 'none';
+      checkoutCartBtn.style.display = 'block';
+      var cartModal = document.getElementById('cartModal');
+      if (cartModal) cartModal.style.display = 'none';
+      
+      if (nomeInput) nomeInput.value = '';
+      if (emailInput) emailInput.value = '';
+    });
+  }
 })();
+
+// --- INTEGRAÇÃO SUPABASE (FORMULÁRIO DE CONTATO) ---
+const form = document.getElementById('form');
+
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nomeInput = document.getElementById('nome');
+    const emailInput = document.getElementById('email');
+    const assuntoInput = document.getElementById('assunto');
+    const mensagemInput = document.getElementById('mensagem');
+
+    const dadosEnvio = {
+      nome: nomeInput ? nomeInput.value.trim() : '',
+      email: emailInput ? emailInput.value.trim() : '',
+      assunto: assuntoInput ? assuntoInput.value.trim() : '',
+      mensagem: mensagemInput ? mensagemInput.value.trim() : ''
+    };
+
+    const { error } = await supabaseClient
+      .from('clientes')
+      .insert([dadosEnvio]);
+
+    if (error) {
+      console.error('Erro ao enviar:', error);
+      if (error.code === '23505') {
+        alert('Este e-mail já foi cadastrado anteriormente!');
+      } else {
+        alert('Erro ao enviar a mensagem: ' + error.message);
+      }
+    } else {
+      alert('Mensagem enviada e salva com sucesso no Supabase!');
+      form.reset();
+    }
+  });
+}
