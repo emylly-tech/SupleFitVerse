@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
@@ -43,7 +43,7 @@
       <!-- Ícone Embalagem/Saco -->
       <symbol id="bag" viewBox="0 0 100 150">
         <path d="M18 8h64l8 16v114a8 8 0 0 1-8 8H18a8 8 0 0 1-8-8V24z" fill="currentColor" />
-        <path d="M18 8h64l8 16H10z" fill="#fff" opacity=".18" 
+        <path d="M18 8h64l8 16H10z" fill="#fff" opacity=".18" />
         <rect x="22" y="48" width="56" height="70" rx="6" fill="#050a0d" opacity=".75" />
         <rect x="30" y="62" width="40" height="5" rx="2.5" fill="#00e676" />
         <rect x="30" y="74" width="30" height="4" rx="2" fill="#fff" opacity=".6" />
@@ -82,7 +82,7 @@
         </button>
 
         <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round">
             <path d="M4 7h16M4 12h16M4 17h16" />
           </svg>
         </button>
@@ -115,7 +115,8 @@
           </div>
         </div>
         <div class="photo">
-          <img alt="Suplito apresentando os suplementos" src="assets/suplito2.png">
+          <!-- IMAGEM 1 CORRIGIDA AQUI -->
+          <img src="{{ url_for('static', filename='assets/suplito2.png') }}" alt="Suplito">
           <div class="tag">
             <strong>Atendimento com IA</strong>
             <small>Suplito, seu assistente virtual</small>
@@ -351,7 +352,8 @@
   <div class="chat" id="chat" hidden>
     <!-- Cabeçalho do Chat -->
     <div class="chat-head">
-      <img src="assets/suplito.png" alt="Suplito">
+      <!-- IMAGEM 2 CORRIGIDA AQUI -->
+      <img src="{{ url_for('static', filename='assets/suplito.png') }}" alt="Suplito">
       <div>
         <strong>Suplito</strong>
         <small>● Assistente virtual</small>
@@ -384,44 +386,42 @@
   <div class="suplito">
     <button class="ask" id="ask">Peça ao Suplito</button>
     <button class="bot" id="bot" aria-label="Abrir chat com o Suplito">
-      <img src="assets/suplito.png" alt="Suplito">
+      <!-- IMAGEM 3 CORRIGIDA AQUI -->
+      <img src="{{ url_for('static', filename='assets/suplito.png') }}" alt="Suplito">
     </button>
   </div>
 
-
-
   <!-- MODAL DO CARRINHO -->
-<div id="cartModal" class="cart-modal" style="display: none;">
-  <div class="cart-content">
-    <div class="cart-header">
-      <h3>Seu Carrinho</h3>
-      <button id="closeCartModal" class="close-btn">&times;</button>
-    </div>
-    <div id="cartItemsList" class="cart-items-container">
-      <!-- Itens do carrinho aparecem aqui -->
-    </div>
-    <div class="cart-footer">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold;">
-        <span>Total:</span>
-        <span id="cartTotalPrice">R$ 0,00</span>
+  <div id="cartModal" class="cart-modal" style="display: none;">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h3>Seu Carrinho</h3>
+        <button id="closeCartModal" class="close-btn">&times;</button>
       </div>
-      
-      <div id="checkoutFormSection" style="margin-top: 15px; display: none; border-top: 1px solid #1e293b; padding-top: 15px;">
-        <h4 style="margin: 0 0 10px; font-size: 1rem; color: #00e676;">Simulação de Pagamento</h4>
-        <input type="text" id="checkoutNome" placeholder="Seu Nome Completo" style="width: 100%; padding: 8px; margin-bottom: 8px; background: #0a1118; border: 1px solid #22343f; border-radius: 6px; color: #fff;">
-        <input type="email" id="checkoutEmail" placeholder="Seu E-mail" style="width: 100%; padding: 8px; margin-bottom: 12px; background: #0a1118; border: 1px solid #22343f; border-radius: 6px; color: #fff;">
-        <button id="confirmCheckoutBtn" style="width: 100%; padding: 10px; background: #00e676; color: #050a0d; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">Concluir</button>
+      <div id="cartItemsList" class="cart-items-container">
+        <!-- Itens do carrinho aparecem aqui -->
       </div>
+      <div class="cart-footer">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold;">
+          <span>Total:</span>
+          <span id="cartTotalPrice">R$ 0,00</span>
+        </div>
+        
+        <div id="checkoutFormSection" style="margin-top: 15px; display: none; border-top: 1px solid #1e293b; padding-top: 15px;">
+          <h4 style="margin: 0 0 10px; font-size: 1rem; color: #00e676;">Simulação de Pagamento</h4>
+          <input type="text" id="checkoutNome" placeholder="Seu Nome Completo" style="width: 100%; padding: 8px; margin-bottom: 8px; background: #0a1118; border: 1px solid #22343f; border-radius: 6px; color: #fff;">
+          <input type="email" id="checkoutEmail" placeholder="Seu E-mail" style="width: 100%; padding: 8px; margin-bottom: 12px; background: #0a1118; border: 1px solid #22343f; border-radius: 6px; color: #fff;">
+          <button id="confirmCheckoutBtn" style="width: 100%; padding: 10px; background: #00e676; color: #050a0d; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">Concluir</button>
+        </div>
 
-      <button id="checkoutCartBtn" style="width: 100%; padding: 12px; background: #00e676; color: #050a0d; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Ir para o Pagamento</button>
+        <button id="checkoutCartBtn" style="width: 100%; padding: 12px; background: #00e676; color: #050a0d; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Ir para o Pagamento</button>
+      </div>
     </div>
   </div>
-</div>
 
   <!-- Lógica e Comportamento Javascript -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js"></script>
-  <script src="js/script.js"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   
 </body>
 </html>

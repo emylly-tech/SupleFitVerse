@@ -7,7 +7,11 @@ SELECT
     c.email AS cliente_email,
     p.valor_total,
     p.status,
-    p.criado_em
+    pr.nome AS produto_nome,
+    ip.quantidade,
+    pr.price AS preco_unitario,
+    (ip.quantidade * pr.price) AS subtotal
 FROM pedidos p
-INNER JOIN clientes c ON p.cliente_id = c.id
-ORDER BY p.criado_em DESC;
+JOIN clientes c ON p.cliente_id = c.id
+JOIN itens_pedido ip ON p.id = ip.pedido_id
+JOIN produtos pr ON ip.produto_id = pr.id;
