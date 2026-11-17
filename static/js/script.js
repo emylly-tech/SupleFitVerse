@@ -229,7 +229,7 @@
   // Inicializa o catálogo ao carregar
   renderProducts(products);
 
-  // --- ASSISTENTE VIRTUAL SUPLITO ---
+  // --- ASSISTENTE VIRTUAL SUPLITO (COM RESTRIÇÃO DE ESCOPO) ---
   var chat = $('#chat'), log = $('#log');
 
   function toggle(show) { if (chat) chat.hidden = !show; }
@@ -260,6 +260,16 @@
   }
 
   async function perguntarAoBackend(perguntaDoUtilizador) {
+    // Prompt do sistema com restrição rigorosa para evitar assuntos externos (ex: copa do mundo)
+    var promptSistema = `
+    Você é o Suplito, o assistente virtual oficial e super atencioso da loja de suplementos SupleFitVerse. 
+    Sua missão é ajudar os clientes com a vitrine, dúvidas sobre suplementos (whey, creatina, pré-treino, etc.), carrinho e pedidos de forma muito educada e prestativa. 
+    REGRAS OBRIGATÓRIAS: 
+    1. Você é especialista exclusivo no universo fitness e nos produtos da SupleFitVerse. Portanto, você não responde sobre assuntos externos (como futebol, política ou conhecimentos gerais). 
+    2. Se o usuário perguntar algo fora do tema (ex: 'quem ganhou a copa do mundo?'), recuse com muita simpatia e educação, dizendo algo como: 'Puxa, esse assunto foge do nosso treino de hoje! Como sou focado em ajudar você a alcançar seus objetivos na SupleFitVerse, só consigo conversar sobre os nossos suplementos e produtos da loja. Tem alguma dúvida sobre creatina, whey ou nossos itens que eu possa ajudar?'
+    Retorne sempre em formato JSON contendo a chave "resposta".
+    `;
+
     try {
       say("Pensando...", 'bot');
 
@@ -269,7 +279,7 @@
         body: JSON.stringify({
           model: 'llama3',
           messages: [
-            { role: 'system', content: 'Você é o Suplito, o assistente virtual oficial da loja de suplementos Suplefitverse.' },
+            { role: 'system', content: promptSistema },
             { role: 'user', content: perguntaDoUtilizador }
           ],
           stream: false,
@@ -296,7 +306,7 @@
     } catch (erro) {
       console.error("Erro de conexão com o Ollama:", erro);
       if (log.lastChild) {
-        log.lastChild.textContent = "Não foi possível conectar ao servidor backend.";
+        log.lastChild.textContent = "Desculpe, o assistente Suplito está offline. Certifique-se de que o Ollama está rodando na porta 11434!";
       }
     }
   }
