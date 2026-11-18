@@ -229,7 +229,7 @@
   // Inicializa o catálogo ao carregar
   renderProducts(products);
 
-  // --- ASSISTENTE VIRTUAL SUPLITO (COM RESTRIÇÃO DE ESCOPO) ---
+  // --- ASSISTENTE VIRTUAL SUPLITO ---
   var chat = $('#chat'), log = $('#log');
 
   function toggle(show) { if (chat) chat.hidden = !show; }
@@ -260,53 +260,28 @@
   }
 
   async function perguntarAoBackend(perguntaDoUtilizador) {
-    // Prompt do sistema com restrição rigorosa para evitar assuntos externos (ex: copa do mundo)
-    var promptSistema = `
-    Você é o Suplito, o assistente virtual oficial e super atencioso da loja de suplementos SupleFitVerse. 
-    Sua missão é ajudar os clientes com a vitrine, dúvidas sobre suplementos (whey, creatina, pré-treino, etc.), carrinho e pedidos de forma muito educada e prestativa. 
-    REGRAS OBRIGATÓRIAS: 
-    1. Você é especialista exclusivo no universo fitness e nos produtos da SupleFitVerse. Portanto, você não responde sobre assuntos externos (como futebol, política ou conhecimentos gerais). 
-    2. Se o usuário perguntar algo fora do tema (ex: 'quem ganhou a copa do mundo?'), recuse com muita simpatia e educação, dizendo algo como: 'Puxa, esse assunto foge do nosso treino de hoje! Como sou focado em ajudar você a alcançar seus objetivos na SupleFitVerse, só consigo conversar sobre os nossos suplementos e produtos da loja. Tem alguma dúvida sobre creatina, whey ou nossos itens que eu possa ajudar?'
-    Retorne sempre em formato JSON contendo a chave "resposta".
-    `;
+    say('Pensando...', 'bot');
 
     try {
-      say("Pensando...", 'bot');
-
-      const response = await fetch('http://localhost:11434/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'llama3',
-          messages: [
-            { role: 'system', content: promptSistema },
-            { role: 'user', content: perguntaDoUtilizador }
-          ],
-          stream: false,
-          format: 'json',
-          options: { temperature: 0.1 }
-        })
+        body: JSON.stringify({ pergunta: perguntaDoUtilizador })
       });
 
-      if (!response.ok) throw new Error('Falha na resposta do servidor Ollama');
-
       const data = await response.json();
-      let conteudoTexto = data.message.content.trim().replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/\s*```$/, '');
-
-      let jsonParsed;
-      try {
-        jsonParsed = JSON.parse(conteudoTexto);
-      } catch (e) {
-        jsonParsed = { resposta: conteudoTexto };
+      if (!response.ok) {
+        throw new Error(data.erro || 'Falha ao conversar com o Suplito.');
       }
-      
+
       if (log.lastChild) {
-        log.lastChild.textContent = jsonParsed.resposta || "Olá! Como posso ajudar na SupleFitVerse?";
+        log.lastChild.textContent = data.resposta || 'Não consegui responder agora.';
       }
     } catch (erro) {
-      console.error("Erro de conexão com o Ollama:", erro);
+      console.error('Erro no Suplito:', erro);
       if (log.lastChild) {
-        log.lastChild.textContent = "Desculpe, o assistente Suplito está offline. Certifique-se de que o Ollama está rodando na porta 11434!";
+        log.lastChild.textContent =
+          'O Suplito está indisponível agora. Tente novamente em instantes.';
       }
     }
   }

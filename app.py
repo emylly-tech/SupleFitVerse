@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, render_template, request, jsonify
 from supabase import create_client, Client
 import os
@@ -73,4 +74,60 @@ def api_pedido():
         return jsonify({"sucesso": True})
     except Exception as e:
         return jsonify({"sucesso": False, "erro": str(e)}), 500
+@app.route('/api/chat', methods=['POST'])
+def api_chat():
+    dados = request.get_json(silent=True) or {}
+    pergunta = (dados.get('pergunta') or '').strip()
 
+    if not pergunta:
+        return jsonify({'erro': 'Digite uma pergunta.'}), 400
+
+    if len(pergunta) > 1000:
+        return jsonify({'erro': 'Pergunta muito longa.'}), 400
+
+    chave = os.environ.get('OLLAMA_API_KEY')
+    modelo = os.environ.get('OLLAMA_MODEL', 'gemma4:31b')
+
+    if not chave:
+        return jsonify({'erro': 'OLLAMA_API_KEY não configurada no Vercel.'}), 500
+
+    instrucao = (
+        'Você é o Suplito, assistente da loja SupleFitVerse. '
+        'Responda em português, com simpatia, sobre produtos da vitrine, '
+        'whey, creatina, suplementos, carrinho e pedidos. '
+        'Se perguntarem sobre assuntos fora da loja e suplementos, '
+        'redirecione educadamente para os produtos da loja. '
+        'Não invente preços, estoque ou promessas médicas.'
+    )
+
+    try:
+        resposta = requests.post(
+            'https://ollama.com/api/chat',
+            headers={
+                'Authorization': f'Bearer {chave}',
+                'Content-Type': 'application/json'
+            },
+            json={
+                'model': modelo,
+                'messages': [
+                    {'role': 'system', 'content': instrucao},
+                    {'role': 'user', 'content': pergunta}
+                ],
+                'stream': False
+            },
+            timeout=40
+        )
+
+        if not resposta.ok:
+            app.logger.warning('Ollama retornou HTTP %s', resposta.status_code)
+            return jsonify({
+                'erro': f'Ollama retornou erro HTTP {resposta.status_code}.'
+            }), 502
+
+        conteudo = resposta.json().get('message', {}).get('content', '')
+        return jsonify({'resposta': conteudo or 'Não consegui responder agora.'})
+
+    except requests.Timeout:
+        return jsonify({'erro': 'A Ollama demorou muito para responder.'}), 504
+    except (requests.RequestException, ValueError):
+        return jsonify({'erro': 'Falha na comunicação com a Ollama.'}), 502
