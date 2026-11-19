@@ -19,26 +19,45 @@ def index():
   return render_template("index.html")
 
 
-# --- ROTAS DE CADASTRO (CREATE) ---
+# --- ROTAS DE CADASTRO (CREATE) COM VALIDAÇÃO ---
 
 
 @app.route("/api/contato", methods=["POST"])
 def api_contato():
   try:
-    dados = request.get_json()
+    dados = request.get_json(silent=True) or {}
+    nome = (dados.get("nome") or "").strip()
+    email = (dados.get("email") or "").strip()
+    assunto = (dados.get("assunto") or "").strip()
+    mensagem = (dados.get("mensagem") or "").strip()
+
+    # Validação de campos obrigatórios e formato de e-mail
+    if not nome or not email or not mensagem:
+      return (
+          jsonify({
+              "sucesso": False,
+              "erro": "Nome, e-mail e mensagem são obrigatórios.",
+          }),
+          400,
+      )
+    if "@" not in email or "." not in email:
+      return (
+          jsonify({"sucesso": False, "erro": "Formato de e-mail inválido."}),
+          400,
+      )
 
     response = (
         supabase.table("contatos")
         .insert({
-            "nome": dados.get("nome"),
-            "email": dados.get("email"),
-            "assunto": dados.get("assunto"),
-            "mensagem": dados.get("mensagem"),
+            "nome": nome,
+            "email": email,
+            "assunto": assunto or "Geral",
+            "mensagem": mensagem,
         })
         .execute()
     )
 
-    return jsonify({"sucesso": True, "data": response.data})
+    return jsonify({"sucesso": True, "data": response.data}), 201
   except Exception as e:
     return jsonify({"sucesso": False, "erro": str(e)}), 500
 
@@ -46,17 +65,40 @@ def api_contato():
 @app.route("/api/pedido", methods=["POST"])
 def api_pedido():
   try:
-    dados = request.get_json()
-    nome = dados.get("nome")
-    email = dados.get("email")
-    valor_total = dados.get("valor_total")
+    dados = request.get_json(silent=True) or {}
+    nome = (dados.get("nome") or "").strip()
+    email = (dados.get("email") or "").strip()
     itens = dados.get("itens", [])
 
-    # 1. Salva ou identifica o cliente
-    cliente_res = (
-        supabase.table("clientes").insert({"nome": nome, "email": email}).execute()
-    )
+    # Validação de campos obrigatórios e lista de itens
+    if not nome or not email or not isinstance(itens, list) or len(itens) == 0:
+      return (
+          jsonify({
+              "sucesso": False,
+              "erro": "Dados do cliente e itens do pedido são obrigatórios.",
+          }),
+          400,
+      )
+    if "@" not in email or "." not in email:
+      return (
+          jsonify({"sucesso": False, "erro": "Formato de e-mail inválido."}),
+          400,
+      )
 
+    # Validação de tipo de dado numérico (float) para o valor total
+    try:
+      valor_total = float(dados.get("valor_total", 0))
+      if valor_total <= 0:
+        raise ValueError()
+    except (TypeError, ValueError):
+      return jsonify({"sucesso": False, "erro": "Valor total inválido."}), 400
+
+    # 1. Salva o cliente
+    cliente_res = (
+        supabase.table("clientes")
+        .insert({"nome": nome, "email": email})
+        .execute()
+    )
     cliente_id = cliente_res.data[0]["id"]
 
     # 2. Cria o pedido
@@ -69,18 +111,38 @@ def api_pedido():
         })
         .execute()
     )
-
     pedido_id = pedido_res.data[0]["id"]
 
-    # 3. Salva os itens do pedido
+    # 3. Valida tipos e salva os itens do pedido
     for item in itens:
+      try:
+        produto_id = int(item["id"])
+        quantidade = int(item.get("quantity", 1))
+      except (KeyError, TypeError, ValueError):
+        return (
+            jsonify({
+                "sucesso": False,
+                "erro": "ID do produto ou quantidade inválidos.",
+            }),
+            400,
+        )
+
+      if quantidade <= 0:
+        return (
+            jsonify({
+                "sucesso": False,
+                "erro": "Quantidade do item deve ser maior que zero.",
+            }),
+            400,
+        )
+
       supabase.table("itens_pedido").insert({
           "pedido_id": pedido_id,
-          "produto_id": item["id"],
-          "quantidade": item.get("quantity", 1),
+          "produto_id": produto_id,
+          "quantidade": quantidade,
       }).execute()
 
-    return jsonify({"sucesso": True})
+    return jsonify({"sucesso": True}), 201
   except Exception as e:
     return jsonify({"sucesso": False, "erro": str(e)}), 500
 
@@ -130,8 +192,8 @@ def listar_contatos():
 
 @app.route("/api/pedido/<int:pedido_id>/status", methods=["PATCH", "PUT"])
 def atualizar_status_pedido(pedido_id):
-  dados = request.get_json() or {}
-  novo_status = dados.get("status", "").strip()
+  dados = request.get_json(silent=True) or {}
+  novo_status = (dados.get("status") or "").strip()
   status_permitidos = [
       "Simulacao",
       "Confirmado",
@@ -162,12 +224,13 @@ def atualizar_status_pedido(pedido_id):
 def excluir_contato(contato_id):
   try:
     res = supabase.table("contatos").delete().eq("id", contato_id).execute()
-    return jsonify(
-        {
+    return (
+        jsonify({
             "sucesso": True,
             "mensagem": f"Registro {contato_id} removido com sucesso.",
-        }
-    ), 200
+        }),
+        200,
+    )
   except Exception as e:
     return jsonify({"sucesso": False, "erro": str(e)}), 500
 
